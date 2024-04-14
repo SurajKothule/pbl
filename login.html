@@ -85,19 +85,19 @@ span.psw {
 
 <div class="Main">
   <h2>Login Form</h2>
-  <form>
+  <form id="loginForm">
     <div class="imgcontainer">
       <img src="https://cdn-icons-png.flaticon.com/512/6681/6681204.png" alt="Avatar" class="avatar">
     </div>
 
     <div class="container">
       <label for="uname"><b>Username</b></label>
-      <input type="text" placeholder="Enter Username" name="uname" required>
+      <input type="text" placeholder="Enter Username" name="uname" id="uname" required>
 
       <label for="psw"><b>Password</b></label>
-      <input type="password" placeholder="Enter Password" name="psw" required>
+      <input type="password" placeholder="Enter Password" name="psw" id="psw" required>
 
-      <button type="submit">Login</button>
+      <button type="button" onclick="login()">Login</button>
       <label>
         <input type="checkbox" checked="checked" name="remember"> Remember me
       </label>
@@ -109,6 +109,20 @@ span.psw {
     </div>
   </form>
 </div>
+
+<script>
+function login() {
+  var username = document.getElementById("uname").value;
+  var password = document.getElementById("psw").value;
+  
+  if (username === "" || password === "") {
+    alert("Please fill in both username and password.");
+  } else {
+    // Proceed with the login action
+    window.location.href = "service.html"; // Replace "service.html" with your desired login action
+  }
+}
+</script>
 
 </body>
 </html>

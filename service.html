@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Choose Your Service</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f3f3f3;
+        }
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
+            font-size: 32px;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between; /* Align items with space between */
+            flex-wrap: wrap; /* Wrap items when they exceed container width */
+        }
+        .service {
+            text-align: center;
+            margin-bottom: 40px;
+            transition: transform 0.3s ease-in-out;
+            flex: 0 0 calc(33.33% - 20px); /* Distribute equally with some spacing */
+        }
+        .service:hover {
+            transform: translateY(-5px);
+        }
+        .service img {
+            max-width: 100%;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease-in-out;
+        }
+        .service img:hover {
+            transform: scale(1.05);
+        }
+        .service h2 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-size: 18px;
+            letter-spacing: 1px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        Choose Your Service
+    </header>
+    <div class="container">
+        <div class="service">
+            <img src="https://example.com/your-image.jpg" alt="Service 1">
+            <h2>Service 1</h2>
+            <a href="canteen.html"><button>Canteen Order</button></a>
+        </div>
+        <div class="service">
+            <img src="https://example.com/service2.jpg" alt="Service 2">
+            <h2>Service 2</h2>
+            <a href="hospital.html"><button>Hospital Registration</button></a>
+        </div>
+        <div class="service">
+            <img src="https://example.com/service3.jpg" alt="Service 3">
+            <h2>Service 3</h2>
+            <a href="bank.html"><button>Banking service</button></a>
+        </div>
+    </div>
+</body>
+</html>

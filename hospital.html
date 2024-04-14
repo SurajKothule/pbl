@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infinite Line Table</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>PATIENT REGISTRATION TABLE</h2>
+    <table id="orderTable">
+        <thead>
+            <tr>
+                <th> SR.NO</th>
+                <th>Patient ID</th>
+                <th> Patient Name</th>
+                <th>Token No.</th>
+                <th>Button</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Table is initially blank, no rows -->
+        </tbody>
+    </table>
+    <button onclick="addRow()">Take Registration</button>
+</div>
+
+<script>
+    // Function to add a new row to the table
+    function addRow() {
+        var table = document.getElementById("orderTable").getElementsByTagName('tbody')[0];
+        var newRow = table.insertRow();
+        var cell1 = newRow.insertCell(0);
+        var cell2 = newRow.insertCell(1);
+        var cell3 = newRow.insertCell(2);
+        var cell4 = newRow.insertCell(3);
+        var cell5 = newRow.insertCell(4);
+        cell1.innerHTML = table.rows.length + 0; // Incrementing SR.NO
+        cell2.innerHTML = "<input type='text' placeholder='Patient ID'>"; // Customer Name input field
+        cell3.innerHTML = "<input type='text' placeholder='Patient  Name'>"; // Service Name input field
+        cell4.innerHTML = "<button onclick='buzz(this)'>Buzz</button>";; // Token No. input field
+        cell5.innerHTML = "<button onclick='removeRow(this)'>Remove</button>"; // Buzz button
+    }
+
+    // Function to remove a row from the table
+    function removeRow(button) {
+        var row = button.parentNode.parentNode;
+        row.parentNode.removeChild(row);
+    }
+
+    // Function to buzz
+    function buzz(button) {
+        // You can implement the buzz functionality here
+        alert("Buzzed!");
+    }
+</script>
+
+</body>
+</html>
