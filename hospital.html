@@ -57,10 +57,11 @@
                     <th> Patient Name</th>
                     <th>Token No.</th>
                     <th>Button</th>
+                    <th>Remove</th>
                 </tr>
             </thead>
             <tbody>
-                <!-- Table is initially blank, no rows -->
+                <!-- Table rows will be dynamically populated here -->
             </tbody>
         </table>
         <button onclick="addRow()">Take Registration</button>
@@ -72,6 +73,28 @@
             '2': false
         };
 
+        // Load saved data from localStorage when the page loads
+        window.onload = function() {
+            var savedData = JSON.parse(localStorage.getItem('tableData'));
+            if (savedData) {
+                var table = document.getElementById("orderTable").getElementsByTagName('tbody')[0];
+                table.innerHTML = ""; // Clear existing rows
+                savedData.forEach(function(rowData) {
+                    var newRow = table.insertRow();
+                    newRow.innerHTML = `
+                        <td>${rowData.srNo}</td>
+                        <td><input type='text' placeholder='Patient ID' value='${rowData.patientID}'></td>
+                        <td><input type='text' placeholder='Patient Name' value='${rowData.patientName}'></td>
+                        <td><select><option value='1'>1</option><option value='2'>2</option></select></td>
+                        <td><button onclick='buzz(this)'>Buzz</button></td>
+                        <td><button onclick='removeRow(this)'>Remove</button></td>
+                    `;
+                    newRow.cells[3].querySelector('select').value = rowData.tokenNo;
+                    tokenCount[rowData.tokenNo] = rowData.tokenCount;
+                });
+            }
+        }
+
         // Function to add a new row to the table
         function addRow() {
             var table = document.getElementById("orderTable").getElementsByTagName('tbody')[0];
@@ -81,11 +104,16 @@
             var cell3 = newRow.insertCell(2);
             var cell4 = newRow.insertCell(3);
             var cell5 = newRow.insertCell(4);
-            cell1.innerHTML = table.rows.length; // Starting SR.NO from 1
-            cell2.innerHTML = "<input type='text' placeholder='Patient ID'>"; // Patient ID input field
-            cell3.innerHTML = "<input type='text' placeholder='Patient Name'>"; // Patient Name input field
-            cell4.innerHTML = "<select><option value='1'>1</option><option value='2'>2</option></select>"; // Token No. dropdown
-            cell5.innerHTML = "<button onclick='buzz(this)'>Buzz</button>"; // Buzz button
+            var cell6 = newRow.insertCell(5);
+            cell1.innerHTML = table.rows.length;
+            cell2.innerHTML = "<input type='text' placeholder='Patient ID'>";
+            cell3.innerHTML = "<input type='text' placeholder='Patient Name'>";
+            cell4.innerHTML = "<select><option value='1'>1</option><option value='2'>2</option></select>";
+            cell5.innerHTML = "<button onclick='buzz(this)'>Buzz</button>";
+            cell6.innerHTML = "<button onclick='removeRow(this)'>Remove</button>";
+
+            // Save table data to localStorage
+            saveTableData();
         }
 
         // Function to remove a row from the table
@@ -94,6 +122,26 @@
             var token = row.cells[3].querySelector('select').value;
             tokenCount[token] = false;
             row.parentNode.removeChild(row);
+
+            // Save table data to localStorage
+            saveTableData();
+        }
+
+        // Function to save table data to localStorage
+        function saveTableData() {
+            var table = document.getElementById("orderTable").getElementsByTagName('tbody')[0];
+            var rowDataArray = [];
+            for (var i = 0; i < table.rows.length; i++) {
+                var rowData = {
+                    srNo: table.rows[i].cells[0].innerText,
+                    patientID: table.rows[i].cells[1].querySelector('input').value,
+                    patientName: table.rows[i].cells[2].querySelector('input').value,
+                    tokenNo: table.rows[i].cells[3].querySelector('select').value,
+                    tokenCount: tokenCount[table.rows[i].cells[3].querySelector('select').value]
+                };
+                rowDataArray.push(rowData);
+            }
+            localStorage.setItem('tableData', JSON.stringify(rowDataArray));
         }
 
         // Function to buzz
@@ -106,7 +154,7 @@
                 if (token === '1') {
                     window.location.href = "https://blynk.cloud/dashboard/273673/global/devices/2066805/organization/273673/devices/1014614/dashboard";
                 } else if (token === '2') {
-                    window.location.href = "https://blynk.cloud/dashboard/273673/global/devices/2066805/organization/273673/devices/1065800/dashboard";
+                    window.location.href = "https://blynk.cloud/dashboard/273673/global/devices/2066805/organization/273673/devices/1066196/dashboard";
                 }
             } else {
                 alert("Token " + token + " has already been buzzed!");
