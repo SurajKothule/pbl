@@ -69,8 +69,8 @@
 
     <script>
         var tokenCount = {
-            '1': false,
-            '2': false
+            '1': 0,
+            '2': 0
         };
 
         // Load saved data from localStorage when the page loads
@@ -83,8 +83,8 @@
                     var newRow = table.insertRow();
                     newRow.innerHTML = `
                         <td>${rowData.srNo}</td>
-                        <td><input type='text' placeholder='Customer Name' value='${rowData.patientID}'></td>
-                        <td><input type='text' placeholder='service Name' value='${rowData.patientName}'></td>
+                        <td><input type='text' placeholder='Customer Name' value='${rowData.CustomerName}'></td>
+                        <td><input type='text' placeholder='Service Name' value='${rowData.ServiceName}'></td>
                         <td><select><option value='1'>1</option><option value='2'>2</option></select></td>
                         <td><button onclick='buzz(this)'>Buzz</button></td>
                         <td><button onclick='removeRow(this)'>Remove</button></td>
@@ -120,7 +120,7 @@
         function removeRow(button) {
             var row = button.parentNode.parentNode;
             var token = row.cells[3].querySelector('select').value;
-            tokenCount[token] = false;
+            tokenCount[token] = 0;
             row.parentNode.removeChild(row);
 
             // Save table data to localStorage
@@ -149,15 +149,11 @@
             var row = button.parentNode.parentNode;
             var token = row.cells[3].querySelector('select').value;
 
-            if (!tokenCount[token]) {
-                tokenCount[token] = true;
-                if (token === '1') {
-                    window.location.href = "https://blynk.cloud/dashboard/273673/global/devices/2066805/organization/273673/devices/1014614/dashboard";
-                } else if (token === '2') {
-                    window.location.href = "https://blynk.cloud/dashboard/273673/global/devices/2066805/organization/273673/devices/1066196/dashboard";
-                }
-            } else {
-                alert("Token " + token + " has already been buzzed!");
+            tokenCount[token]++;
+            if (token === '1') {
+                window.location.href = "https://blynk.cloud/dashboard/273673/global/devices/2066805/organization/273673/devices/1014614/dashboard";
+            } else if (token === '2') {
+                window.location.href = "https://blynk.cloud/dashboard/273673/global/devices/2066805/organization/273673/devices/1066196/dashboard";
             }
         }
     </script>
