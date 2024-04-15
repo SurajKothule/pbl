@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,6 +12,7 @@
             padding: 0;
             background-color: #f0f0f0;
         }
+
         .container {
             width: 80%;
             margin: 20px auto;
@@ -20,73 +22,146 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             overflow-x: auto;
         }
+
         table {
             width: 100%;
             border-collapse: collapse;
         }
-        th, td {
+
+        th,
+        td {
             padding: 12px 15px;
             text-align: left;
             border-bottom: 1px solid #ddd;
         }
+
         th {
             background-color: #f2f2f2;
         }
+
         tr:hover {
             background-color: #f5f5f5;
         }
     </style>
 </head>
+
 <body>
 
-<div class="container">
-    <h2>FOOD ORDER TABLE</h2>
-    <table id="orderTable">
-        <thead>
-            <tr>
-                <th> SR.NO</th>
-                <th>OrderID</th>
-                <th> Food  Name</th>
-                <th>Token No.</th>
-                <th>Button</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Table is initially blank, no rows -->
-        </tbody>
-    </table>
-    <button onclick="addRow()">Take Order</button>
-</div>
+    <div class="container">
+        <h2>FOOD ORDER TABLE</h2>
+        <table id="orderTable">
+            <thead>
+                <tr>
+                    <th> SR.NO</th>
+                    <th>Order ID</th>
+                    <th> Food Name</th>
+                    <th>Token No.</th>
+                    <th>Button</th>
+                    <th>Remove</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Table rows will be dynamically populated here -->
+            </tbody>
+        </table>
+        <button onclick="addRow()">Take Order</button>
+    </div>
 
-<script>
-    // Function to add a new row to the table
-    function addRow() {
-        var table = document.getElementById("orderTable").getElementsByTagName('tbody')[0];
-        var newRow = table.insertRow();
-        var cell1 = newRow.insertCell(0);
-        var cell2 = newRow.insertCell(1);
-        var cell3 = newRow.insertCell(2);
-        var cell4 = newRow.insertCell(3);
-        var cell5 = newRow.insertCell(4);
-        cell1.innerHTML = table.rows.length + 0; // Incrementing SR.NO
-        cell2.innerHTML = "<input type='text' placeholder='Order ID'>"; // Customer Name input field
-        cell3.innerHTML = "<input type='text' placeholder='Food  Name'>"; // Service Name input field
-        cell4.innerHTML = "<button onclick='buzz(this)'>Buzz</button>";; // Token No. input field
-        cell5.innerHTML = "<button onclick='removeRow(this)'>Remove</button>"; // Buzz button
-    }
+    <script>
+        var tokenCount = {
+            '1': false,
+            '2': false
+        };
 
-    // Function to remove a row from the table
-    function removeRow(button) {
-        var row = button.parentNode.parentNode;
-        row.parentNode.removeChild(row);
-    }
+        // Load saved data from localStorage when the page loads
+        window.onload = function() {
+            var savedData = JSON.parse(localStorage.getItem('tableData'));
+            if (savedData) {
+                var table = document.getElementById("orderTable").getElementsByTagName('tbody')[0];
+                table.innerHTML = ""; // Clear existing rows
+                savedData.forEach(function(rowData) {
+                    var newRow = table.insertRow();
+                    newRow.innerHTML = `
+                        <td>${rowData.srNo}</td>
+                        <td><input type='text' placeholder='Order ID' value='${rowData.patientID}'></td>
+                        <td><input type='text' placeholder='Food Name' value='${rowData.patientName}'></td>
+                        <td><select><option value='1'>1</option><option value='2'>2</option></select></td>
+                        <td><button onclick='buzz(this)'>Buzz</button></td>
+                        <td><button onclick='removeRow(this)'>Remove</button></td>
+                    `;
+                    newRow.cells[3].querySelector('select').value = rowData.tokenNo;
+                    tokenCount[rowData.tokenNo] = rowData.tokenCount;
+                });
+            }
+        }
 
-    // Function to buzz
-    function buzz(button) {
-        // You can implement the buzz functionality here
-        alert("Buzzed!");
-    }
-</script>
+        // Function to add a new row to the table
+        function addRow() {
+            var table = document.getElementById("orderTable").getElementsByTagName('tbody')[0];
+            var newRow = table.insertRow();
+            var cell1 = newRow.insertCell(0);
+            var cell2 = newRow.insertCell(1);
+            var cell3 = newRow.insertCell(2);
+            var cell4 = newRow.insertCell(3);
+            var cell5 = newRow.insertCell(4);
+            var cell6 = newRow.insertCell(5);
+            cell1.innerHTML = table.rows.length;
+            cell2.innerHTML = "<input type='text' placeholder='Order Id'>";
+            cell3.innerHTML = "<input type='text' placeholder='Food Name'>";
+            cell4.innerHTML = "<select><option value='1'>1</option><option value='2'>2</option></select>";
+            cell5.innerHTML = "<button onclick='buzz(this)'>Buzz</button>";
+            cell6.innerHTML = "<button onclick='removeRow(this)'>Remove</button>";
+
+            // Save table data to localStorage
+            saveTableData();
+        }
+
+        // Function to remove a row from the table
+        function removeRow(button) {
+            var row = button.parentNode.parentNode;
+            var token = row.cells[3].querySelector('select').value;
+            tokenCount[token] = false;
+            row.parentNode.removeChild(row);
+
+            // Save table data to localStorage
+            saveTableData();
+        }
+
+        // Function to save table data to localStorage
+        function saveTableData() {
+            var table = document.getElementById("orderTable").getElementsByTagName('tbody')[0];
+            var rowDataArray = [];
+            for (var i = 0; i < table.rows.length; i++) {
+                var rowData = {
+                    srNo: table.rows[i].cells[0].innerText,
+                    OrderID: table.rows[i].cells[1].querySelector('input').value,
+                    FoodName: table.rows[i].cells[2].querySelector('input').value,
+                    tokenNo: table.rows[i].cells[3].querySelector('select').value,
+                    tokenCount: tokenCount[table.rows[i].cells[3].querySelector('select').value]
+                };
+                rowDataArray.push(rowData);
+            }
+            localStorage.setItem('tableData', JSON.stringify(rowDataArray));
+        }
+
+        // Function to buzz
+        function buzz(button) {
+            var row = button.parentNode.parentNode;
+            var token = row.cells[3].querySelector('select').value;
+
+            if (!tokenCount[token]) {
+                tokenCount[token] = true;
+                if (token === '1') {
+                    window.location.href = "https://blynk.cloud/dashboard/273673/global/devices/2066805/organization/273673/devices/1014614/dashboard";
+                } else if (token === '2') {
+                    window.location.href = "https://blynk.cloud/dashboard/273673/global/devices/2066805/organization/273673/devices/1066196/dashboard";
+                }
+            } else {
+                alert("Token " + token + " has already been buzzed!");
+            }
+        }
+    </script>
 
 </body>
+
 </html>
