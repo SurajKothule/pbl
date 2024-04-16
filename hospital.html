@@ -149,15 +149,11 @@
             var row = button.parentNode.parentNode;
             var token = row.cells[3].querySelector('select').value;
 
-            if (!tokenCount[token]) {
-                tokenCount[token] = true;
-                if (token === '1') {
-                    window.location.href = "https://blynk.cloud/dashboard/273673/global/devices/2066805/organization/273673/devices/1014614/dashboard";
-                } else if (token === '2') {
-                    window.location.href = "https://blynk.cloud/dashboard/273673/global/devices/2066805/organization/273673/devices/1066196/dashboard";
-                }
-            } else {
-                alert("Token " + token + " has already been buzzed!");
+            tokenCount[token]++;
+            if (token === '1') {
+                window.location.href = "https://blynk.cloud/dashboard/273673/global/devices/2066805/organization/273673/devices/1014614/dashboard";
+            } else if (token === '2') {
+                window.location.href = "https://blynk.cloud/dashboard/273673/global/devices/2066805/organization/273673/devices/1066196/dashboard";
             }
         }
     </script>
